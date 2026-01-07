@@ -15,41 +15,43 @@
 <body>
     <div class="container">
         <h1>Tic Tac Toe</h1>
-        <a href="/chat.html"
-            style="position: absolute; top: 1rem; right: 1rem; color: var(--accent-color); text-decoration: none; font-size: 0.9rem;">💬
-            Global Chat</a>
+        <a href="/chat.html" class="nav-link" style="position: absolute; top: 1.5rem; right: 1.5rem;">
+            💬 Global Chat
+        </a>
 
         <!-- Login Screen -->
         <div id="login-screen">
-            <p>Enter your email to connect</p>
-            <input type="email" id="email-input" placeholder="your@email.com" autocomplete="off">
-            <button id="login-btn">Connect</button>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Enter your email to connect</p>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <input type="email" id="email-input" placeholder="your@email.com" autocomplete="off">
+                <button id="login-btn">Connect</button>
+            </div>
         </div>
 
         <!-- Lobby Screen -->
         <div id="lobby-screen" class="hidden">
-            <div id="user-display"></div>
+            <div id="user-display" class="user-badge"></div>
 
-            <div id="online-users-container"
-                style="margin: 1rem 0; text-align: left; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
-                <h4 style="margin: 0 0 5px 0; color: #cbd5e1;">Online Players:</h4>
-                <ul id="online-users-list" style="margin: 0; padding-left: 20px; color: #22d3ee; font-size: 0.9rem;">
+            <div class="online-users-panel">
+                <h4>Online Players:</h4>
+                <ul id="online-users-list">
                     <!-- List populated by JS -->
                 </ul>
             </div>
 
-            <h3>Start a Game</h3>
-            <input type="email" id="opponent-email-input" placeholder="Opponent's Email" autocomplete="off">
-            <button id="play-btn">Play</button>
-            <div id="lobby-message" style="margin-top: 10px; color: #ef4444; font-size: 0.9rem;"></div>
+            <h3 style="margin: 1.5rem 0 1rem 0;">Start a Game</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <input type="email" id="opponent-email-input" placeholder="Opponent's Email" autocomplete="off">
+                <button id="play-btn">Play</button>
+            </div>
+            <div id="lobby-message"></div>
         </div>
 
         <!-- Game Screen -->
         <div id="game-screen" class="hidden">
-            <div id="players-info"
-                style="margin-bottom: 1rem; font-size: 0.9rem; display: flex; justify-content: space-between;">
-                <span id="p1-display">You: X</span>
-                <span id="p2-display">Opponent: O</span>
+            <div id="players-info">
+                <span id="p1-display" class="player-badge">You: X</span>
+                <span id="p2-display" class="player-badge">Opponent: O</span>
             </div>
             <div id="game-board">
                 <div class="cell" data-index="0"></div>
@@ -63,7 +65,8 @@
                 <div class="cell" data-index="8"></div>
             </div>
             <div id="status">Waiting for move...</div>
-            <button id="reset-btn" class="hidden" style="margin-top: 1rem; background: #ef4444;">Back to Lobby</button>
+            <button id="reset-btn" class="hidden" style="margin-top: 1rem; background: var(--danger);">Back to
+                Lobby</button>
         </div>
     </div>
 

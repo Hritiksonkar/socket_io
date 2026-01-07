@@ -5,7 +5,12 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: "*", // Allow all origins for simplicity/debugging
+        methods: ["GET", "POST"]
+    }
+});
 
 app.use(express.static(path.resolve("./public")));
 
@@ -30,11 +35,20 @@ io.on("connection", (socket) => {
 
         // Broadcast online users
         io.emit("users_online", Object.keys(users));
+
+        // Welcome message
+        socket.emit("chat_message", {
+            user: "System",
+            text: `Welcome, ${normalizedEmail}!`,
+            timestamp: new Date().toLocaleTimeString()
+        });
     });
 
     // Challenge Logic
     socket.on("challenge", ({ opponentEmail }) => {
         const myEmail = socketToEmail[socket.id];
+        if (!myEmail) return;
+
         const normalizedOpponentEmail = opponentEmail.toLowerCase();
         const opponentSocketId = users[normalizedOpponentEmail];
 
@@ -137,7 +151,23 @@ io.on("connection", (socket) => {
     socket.on("chat_message", (msg) => {
         const email = socketToEmail[socket.id];
         if (email) {
-            io.emit("chat_message", { user: email, text: msg });
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            io.emit("chat_message", { user: email, text: msg, timestamp });
+        }
+    });
+
+    // Typing Indicators
+    socket.on("typing", () => {
+        const email = socketToEmail[socket.id];
+        if (email) {
+            socket.broadcast.emit("user_typing", { user: email });
+        }
+    });
+
+    socket.on("stop_typing", () => {
+        const email = socketToEmail[socket.id];
+        if (email) {
+            socket.broadcast.emit("user_stop_typing", { user: email });
         }
     });
 });

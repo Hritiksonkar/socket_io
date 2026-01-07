@@ -2,107 +2,348 @@
   --primary-color: #6366f1;
   --secondary-color: #a855f7;
   --bg-color: #0f172a;
-  --panel-bg: #1e293b;
+  --panel-bg: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
   --text-color: #f8fafc;
+  --text-muted: #94a3b8;
   --accent-color: #22d3ee;
-  --border-color: #334155;
-  --cell-bg: #334155;
-  --cell-hover: #475569;
+  --message-mine-bg: #4f46e5;
+  --message-other-bg: #334155;
+  --danger: #ef4444;
+  --success: #22c55e;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
   color: var(--text-color);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .container {
   background-color: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-  width: 100%;
-  max-width: 400px;
+  border-radius: 1.5rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 450px;
   text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 10;
 }
 
 h1 {
   margin-bottom: 2rem;
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+#user-display {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Helper Classes for Tic Tac Toe */
+.online-users-panel {
+  margin: 1rem 0;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 0.8rem;
+  border: 1px solid var(--glass-border);
+}
+
+.online-users-panel h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+#online-users-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--accent-color);
+  font-size: 0.9rem;
+}
+
+#online-users-list li {
+  margin-bottom: 0.3rem;
+  transition: color 0.2s;
+}
+
+#online-users-list li:hover {
+  color: var(--primary-color);
+}
+
+.user-badge {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--text-color) !important;
+}
+
+.player-badge {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.nav-link {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.nav-link:hover {
+  opacity: 1;
+}
+
+#players-info {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.8rem;
+  border-radius: 0.8rem;
+}
+
+#lobby-message {
+  margin-top: 10px;
+  color: var(--danger);
+  font-size: 0.9rem;
+  min-height: 1.2em;
 }
 
 input {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.8rem 1rem;
   margin-bottom: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-color);
+  border-radius: 0.75rem;
+  border: 1px solid var(--glass-border);
+  background-color: rgba(0, 0, 0, 0.2);
   color: var(--text-color);
   box-sizing: border-box;
-  /* Fix padding issue */
   font-size: 1rem;
+  transition: all 0.2s;
 }
 
 input:focus {
-  outline: 2px solid var(--primary-color);
-  border-color: transparent;
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
 button {
   width: 100%;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.8rem;
+  border-radius: 0.75rem;
   border: none;
   background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
   font-size: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Chat Specific Styles */
+.chat-container {
+  width: 100%;
+  height: 450px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  position: relative;
+}
+
+#messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) transparent;
+}
+
+#messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+#messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  background-color: var(--glass-border);
+  border-radius: 20px;
+}
+
+.message-bubble {
+  background: var(--message-other-bg);
+  padding: 0.6rem 1rem;
+  border-radius: 1rem;
+  border-bottom-left-radius: 0.2rem;
+  max-width: 80%;
+  word-wrap: break-word;
+  animation: fadeIn 0.3s ease;
+  position: relative;
+}
+
+.message-bubble.mine {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 1rem;
+  border-bottom-right-radius: 0.2rem;
+  border-bottom-left-radius: 1rem;
+}
+
+.message-bubble.system {
+  align-self: center;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-radius: 1rem;
+  padding: 0.2rem 0.8rem;
+  max-width: 90%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-bubble .user {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+  display: block;
+  font-weight: 600;
+}
+
+.message-bubble.mine .user {
+  display: none;
+  /* Hide my own name */
+}
+
+.message-bubble .time {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  margin-left: 0.5rem;
+  float: right;
+  margin-top: 0.2rem;
+}
+
+#chat-form {
+  display: flex;
+  padding: 0.8rem;
+  background: rgba(0, 0, 0, 0.3);
+  gap: 0.5rem;
+}
+
+#chat-input {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+#send-chat-btn {
+  width: auto;
+  padding: 0 1.2rem;
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
+#typing-indicator {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  height: 1.2rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  font-style: italic;
+  padding-left: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#typing-indicator.active {
+  opacity: 1;
+}
+
+/* Tic Tac Toe Grid overrides */
 #game-board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.8rem;
+  margin: 1.5rem 0;
 }
 
 .cell {
-  background-color: var(--cell-bg);
+  background-color: rgba(255, 255, 255, 0.05);
   aspect-ratio: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2.5rem;
-  font-weight: bold;
-  border-radius: 0.5rem;
+  font-size: 3rem;
+  font-weight: 800;
+  border-radius: 0.8rem;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: all 0.2s;
+  box-shadow: inset 0 0 0 1px var(--glass-border);
 }
 
 .cell:hover {
-  background-color: var(--cell-hover);
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
 .cell:active {
@@ -111,21 +352,10 @@ button:hover {
 
 .cell.x {
   color: var(--accent-color);
+  text-shadow: 0 0 10px var(--accent-color);
 }
 
 .cell.o {
   color: var(--secondary-color);
-}
-
-#status {
-  margin-top: 1rem;
-  font-weight: 600;
-  color: var(--accent-color);
-  min-height: 1.5em;
-}
-
-#user-display {
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  color: #94a3b8;
+  text-shadow: 0 0 10px var(--secondary-color);
 }
