@@ -105,7 +105,19 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+        const socket = io({
+            transports: ['websocket'],
+            upgrade: false
+        });
+
+        socket.on("connect_error", (err) => {
+            console.error("Connection Error:", err);
+            const statusEl = document.getElementById('connection-status');
+            if (statusEl) {
+                statusEl.textContent = "Connection failed. WebSockets might be blocked.";
+                statusEl.style.color = "var(--danger)";
+            }
+        });
 
         const loginSection = document.getElementById('login-section');
         const chatSection = document.getElementById('chat-section');

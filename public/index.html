@@ -72,7 +72,17 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+        const socket = io({
+            transports: ['websocket'],
+            upgrade: false
+        });
+
+        socket.on("connect_error", (err) => {
+            console.error("Connection Error:", err);
+            if (document.getElementById('lobby-message')) {
+                document.getElementById('lobby-message').textContent = "Connection failed. Please refresh or check your internet.";
+            }
+        });
 
         // DOM Elements
         const loginScreen = document.getElementById('login-screen');
