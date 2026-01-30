@@ -147,27 +147,46 @@ io.on("connection", (socket) => {
         console.log(`Socket disconnected: ${socket.id}`);
     });
 
-    // Chat Logic
-    socket.on("chat_message", (msg) => {
-        const email = socketToEmail[socket.id];
-        if (email) {
+    // Private Chat Logic
+    socket.on("private_message", ({ to, text }) => {
+        const senderEmail = socketToEmail[socket.id];
+        const recipientSocketId = users[to];
+
+        if (senderEmail && recipientSocketId) {
             const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            io.emit("chat_message", { user: email, text: msg, timestamp });
+
+            // Emit to recipient
+            io.to(recipientSocketId).emit("private_message", {
+                from: senderEmail,
+                to: to,
+                text,
+                timestamp
+            });
+
+            // Emit back to sender (confirm it was sent)
+            socket.emit("private_message", {
+                from: senderEmail,
+                to: to,
+                text,
+                timestamp
+            });
         }
     });
 
-    // Typing Indicators
-    socket.on("typing", () => {
-        const email = socketToEmail[socket.id];
-        if (email) {
-            socket.broadcast.emit("user_typing", { user: email });
+    // Typing Indicators (Private)
+    socket.on("typing", ({ to }) => {
+        const senderEmail = socketToEmail[socket.id];
+        const recipientSocketId = users[to];
+        if (senderEmail && recipientSocketId) {
+            io.to(recipientSocketId).emit("user_typing", { from: senderEmail });
         }
     });
 
-    socket.on("stop_typing", () => {
-        const email = socketToEmail[socket.id];
-        if (email) {
-            socket.broadcast.emit("user_stop_typing", { user: email });
+    socket.on("stop_typing", ({ to }) => {
+        const senderEmail = socketToEmail[socket.id];
+        const recipientSocketId = users[to];
+        if (senderEmail && recipientSocketId) {
+            io.to(recipientSocketId).emit("user_stop_typing", { from: senderEmail });
         }
     });
 });
@@ -187,6 +206,7 @@ function checkWinner(board) {
     return null;
 }
 
-server.listen(9000, () => {
-    console.log("Server is running on port 9000");
+const PORT = process.env.PORT || 9000;
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
